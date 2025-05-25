@@ -2,6 +2,7 @@
 #+AUTHOR: Elias Ainsworth
 
 * Let's see how this goes 
+Test to see if it actually pulls from git.
 😭
 #+BEGIN_SRC rust
 fn main() {
