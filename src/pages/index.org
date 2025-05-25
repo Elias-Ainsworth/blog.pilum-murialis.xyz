@@ -1,15 +1,3 @@
-#+TITLE: Watch out for thorns
-#+AUTHOR: Elias Ainsworth
-
-* Let's see how this goes 
-[[file:test.org][test]]
-Test to see if it actually pulls from git.
-😭
-#+BEGIN_SRC rust
-fn main() {
-    println!("");
-}
-#+END_SRC
-「僕はエリアス・エインズワースかもしれないが、 チセがいない――つまり、僕は完全に『チセレス』だ。」
-
-The Ancient Magus Bride...I need a chise in my life...
+#+TITLE: Work in Progress 
+This website is under construction, come back later to see
+more...stuff 👍.
