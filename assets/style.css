@@ -103,6 +103,58 @@ pre {
   overflow-x: auto;
 }
 
+/* Manual code highlighting for .org-src-container */
+
+.org-src-container .org-comment {
+  color: var(--green);
+  font-style: italic;
+}
+
+.org-src-container .org-keyword {
+  color: var(--purple);
+  font-weight: bold;
+}
+
+.org-src-container .org-string {
+  color: var(--orange);
+}
+
+.org-src-container .org-type {
+  color: var(--blue);
+}
+
+.org-src-container .org-function-name {
+  color: var(--yellow);
+}
+
+.org-src-container .org-variable-name {
+  color: var(--red);
+}
+
+.org-src-container .org-constant {
+  color: var(--aqua);
+}
+
+.org-src-container .org-builtin {
+  color: var(--brown);
+}
+
+.org-src-container .org-warning {
+  color: var(--red);
+  background-color: #330000;
+  font-weight: bold;
+}
+
+.org-src-container .org-doc {
+  color: var(--fg2);
+  font-style: italic;
+}
+
+.org-src-container .org-preprocessor {
+  color: var(--aqua);
+  font-weight: bold;
+}
+
 .org-src-container {
   background-color: transparent;
   border-left: 2px solid var(--accent);

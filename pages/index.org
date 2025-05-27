@@ -1,0 +1,12 @@
+# #+SETUPFILE: ~/.config/emacs/org/style.org
+#+TITLE: Work in Progress
+This website is under construction, come back later to see
+more...stuff 👍.
+
+#+BEGIN_SRC rust
+fn main() {
+        println!()
+}
+#+END_SRC
+
+Test lul.
