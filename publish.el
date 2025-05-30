@@ -5,6 +5,9 @@
 (require 'ox-publish)
 (require 'htmlize)
 
+(setq org-html-doctype "html5")
+(setq org-html-html5-fancy t)
+
 (setq org-html-htmlize-output-type 'css)
 (setq org-src-fontify-natively t)
 (setq org-html-validation-link nil)
@@ -21,7 +24,11 @@
          :publishing-function org-html-publish-to-html
          :with-toc nil
          :html-head-include-default-style nil
-         :html-head "<link rel=\"stylesheet\" href=\"../assets/style.css\" />")
+		 :html-head "<meta charset=\"UTF-8\">
+			<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
+			<link rel=\"stylesheet\" href=\"../assets/style.css\">
+			<link rel=\"icon\" href=\"../assets/favicon.ico\" type=\"image/x-icon\">"
+         ;; :html-head "<link rel=\"stylesheet\" href=\"../assets/style.css\" />")
          :html-postamble nil
 
         ("site-static"
