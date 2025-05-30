@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-05-26 Mon 18:54 -->
+<!-- 2025-05-29 Thu 22:00 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Work in Progress</title>
@@ -17,20 +17,138 @@
 This website is under construction, come back later to see
 more&#x2026;stuff 👍.
 </p>
+<div class="org-src-container">
+<pre class="src src-toml">[<span class="org-type">package</span>]
+<span class="org-variable-name">name</span> = <span class="org-string">"guessing_game"</span>
+<span class="org-variable-name">version</span> = <span class="org-string">"0.1.0"</span>
+<span class="org-variable-name">edition</span> = <span class="org-string">"2021"</span>
+
+[<span class="org-type">dependencies</span>]
+<span class="org-variable-name">rand</span> = <span class="org-string">"0.9.0"</span>
+</pre>
+</div>
 
 <div class="org-src-container">
-<pre class="src src-rust"><span style="color: #fb4933;">fn</span> <span style="color: #fabd2f;">main</span>() {
-        <span style="color: #fe8019;">println!</span>()
+<pre class="src src-rust"><span class="org-comment-delimiter">// </span><span class="org-comment">Use the cmp::Ordering module and the io module for comparison and input-output.</span>
+<span class="org-keyword">use</span> <span class="org-constant">std</span>::{<span class="org-constant">cmp</span>::<span class="org-type">Ordering</span>, io};
+<span class="org-comment-delimiter">// </span><span class="org-comment">Use the rand::Rng module for random number generation.</span>
+<span class="org-keyword">use</span> <span class="org-constant">rand</span>::<span class="org-type">Rng</span>;
+
+<span class="org-keyword">fn</span> <span class="org-function-name">main</span>() {
+    <span class="org-rust-builtin-formatting-macro">println!</span>(<span class="org-string">"Guess a number!"</span>);
+    <span class="org-comment-delimiter">// </span><span class="org-comment">Generate a random number in range 1-100.</span>
+    <span class="org-keyword">let</span> <span class="org-variable-name">secret_number</span>: <span class="org-type">u32</span> = <span class="org-constant">rand</span>::rng().random_range(1..=100);
+    <span class="org-comment-delimiter">// </span><span class="org-comment">Start try counter at 0.</span>
+    <span class="org-keyword">let</span> <span class="org-keyword">mut</span> <span class="org-variable-name">tries</span>: <span class="org-type">u32</span> = 0;
+    <span class="org-comment-delimiter">// </span><span class="org-comment">Start an infinite loop.</span>
+    '<span class="org-variable-name">ordering</span>: <span class="org-keyword">loop</span> {
+        <span class="org-comment-delimiter">// </span><span class="org-comment">Create empty string.</span>
+        <span class="org-keyword">let</span> <span class="org-keyword">mut</span> <span class="org-variable-name">input</span> = <span class="org-type">String</span>::new();
+        <span class="org-comment-delimiter">// </span><span class="org-comment">Create match statement for the read_line method.</span>
+        <span class="org-keyword">match</span> <span class="org-constant">io</span>::stdin().read_line(<span class="org-rust-ampersand">&amp;</span><span class="org-keyword">mut</span> input) {
+            <span class="org-comment-delimiter">// </span><span class="org-comment">If the result value for read_line is Ok then run the program's logic.</span>
+            <span class="org-type">Ok</span>(_) =&gt; {
+                <span class="org-comment-delimiter">// </span><span class="org-comment">Assign the trimmed and parsed input Ok value to the variable guess.</span>
+                <span class="org-keyword">let</span> <span class="org-variable-name">guess</span>: <span class="org-type">u32</span> = <span class="org-keyword">match</span> input.trim().parse() {
+                    <span class="org-comment-delimiter">// </span><span class="org-comment">If the result value for parse is Ok then return the contained value to the</span>
+                    <span class="org-comment-delimiter">// </span><span class="org-comment">variable.</span>
+                    <span class="org-type">Ok</span>(num) =&gt; num,
+                    <span class="org-comment-delimiter">// </span><span class="org-comment">If the result value for parse is Err then continue the loop.</span>
+                    <span class="org-type">Err</span>(_) =&gt; <span class="org-keyword">continue</span>,
+                };
+                <span class="org-comment-delimiter">// </span><span class="org-comment">Add one to the try counter.</span>
+                tries += 1;
+                <span class="org-comment-delimiter">// </span><span class="org-comment">Match the comparison of the guess with the generated number.</span>
+                <span class="org-keyword">match</span> guess.cmp(<span class="org-rust-ampersand">&amp;</span>secret_number) {
+                    <span class="org-comment-delimiter">// </span><span class="org-comment">If equal then print a success statement with the amount of tries it took.</span>
+                    <span class="org-type">Ordering</span>::<span class="org-type">Equal</span> =&gt; {
+                        <span class="org-rust-builtin-formatting-macro">println!</span>(<span class="org-string">"You guessed it right in </span><span class="org-rust-string-interpolation">{}</span><span class="org-string"> tries!"</span>, tries);
+                        <span class="org-keyword">break</span> '<span class="org-variable-name">ordering</span>;
+                    }
+                    <span class="org-comment-delimiter">// </span><span class="org-comment">If not equal print the respective comparison.</span>
+                    <span class="org-type">Ordering</span>::<span class="org-type">Less</span> =&gt; <span class="org-rust-builtin-formatting-macro">println!</span>(<span class="org-string">"Too small."</span>),
+                    <span class="org-type">Ordering</span>::<span class="org-type">Greater</span> =&gt; <span class="org-rust-builtin-formatting-macro">println!</span>(<span class="org-string">"Too big."</span>),
+                }
+            }
+            <span class="org-comment-delimiter">// </span><span class="org-comment">If the result value for read_line is Err then print the error and break 'ordering out of the loop.</span>
+            <span class="org-type">Err</span>(error) =&gt; {
+                <span class="org-rust-builtin-formatting-macro">println!</span>(<span class="org-string">"Error: </span><span class="org-rust-string-interpolation">{error}</span><span class="org-string">"</span>);
+                <span class="org-keyword">break</span> '<span class="org-variable-name">ordering</span>;
+            }
+        };
+    }
 }
 </pre>
 </div>
 
-<p>
-Test lul.
-</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span class="org-keyword">require</span> '<span class="org-constant">gruvbox-theme</span>)
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-nix">{ pkgs, lib, ... }:
+
+<span class="org-nix-keyword">let</span>
+  <span class="org-comment"># String</span>
+  <span class="org-nix-attribute">name</span> = <span class="org-string">"example"</span>;
+
+  <span class="org-comment"># Integer</span>
+  <span class="org-nix-attribute">port</span> = 8080;
+
+  <span class="org-comment"># Float</span>
+  <span class="org-nix-attribute">ratio</span> = 3.14;
+
+  <span class="org-comment"># Boolean</span>
+  <span class="org-nix-attribute">enabled</span> = <span class="org-nix-builtin">true</span>;
+
+  <span class="org-comment"># Null</span>
+  <span class="org-nix-attribute">nothing</span> = <span class="org-nix-builtin">null</span>;
+
+  <span class="org-comment"># Path</span>
+  <span class="org-nix-attribute">localScript</span> = <span class="org-nix-constant">./scripts/start.sh</span>;
+
+  <span class="org-comment"># List</span>
+  <span class="org-nix-attribute">services</span> = [
+    <span class="org-string">"nginx"</span>
+    <span class="org-string">"postgresql"</span>
+    <span class="org-string">"redis"</span>
+  ];
+
+  <span class="org-comment"># Attribute set</span>
+  <span class="org-nix-attribute">config</span> = {
+    <span class="org-nix-keyword">inherit</span> name port ratio;
+    <span class="org-nix-attribute">description</span> = <span class="org-string">"Sample service with all types"</span>;
+    <span class="org-nix-attribute">paths</span> = [ localScript ];
+    <span class="org-nix-attribute">metadata</span> = {
+      <span class="org-nix-attribute">createdBy</span> = <span class="org-string">"nixos-config"</span>;
+      <span class="org-nix-attribute">tags</span> = [ <span class="org-string">"nix"</span> <span class="org-string">"types"</span> <span class="org-string">"demo"</span> ];
+    };
+  };
+
+  <span class="org-comment"># Function</span>
+  <span class="org-nix-attribute">mkService</span> = { name, port, ... }: {
+    <span class="org-nix-attribute">serviceName</span> = name;
+    <span class="org-nix-attribute">listenPort</span> = port;
+    <span class="org-nix-attribute">enable</span> = <span class="org-nix-builtin">true</span>;
+    <span class="org-nix-attribute">exec</span> = <span class="org-string">"</span><span class="org-nix-antiquote">${</span>pkgs.bash<span class="org-nix-antiquote">}</span><span class="org-string">/bin/bash </span><span class="org-nix-antiquote">${</span>localScript<span class="org-nix-antiquote">}</span>";
+  };
+
+  <span class="org-comment"># Import external file (path again)</span>
+  <span class="org-nix-attribute">importedConfig</span> = <span class="org-nix-builtin">import</span> <span class="org-nix-constant">./example-config.nix</span>;
+
+<span class="org-nix-keyword">in</span> {
+  <span class="org-nix-attribute">services.example</span> = mkService {
+    <span class="org-nix-keyword">inherit</span> name port;
+  };
+
+  <span class="org-nix-attribute">extraConfig</span> = config // importedConfig;
+}
+</pre>
+</div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2025-05-26 Mon 18:54</p>
+<p class="date">Created: 2025-05-29 Thu 22:00</p>
 </div>
 </body>
 </html>

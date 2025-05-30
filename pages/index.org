@@ -1,12 +1,130 @@
 # #+SETUPFILE: ~/.config/emacs/org/style.org
 #+TITLE: Work in Progress
+
 This website is under construction, come back later to see
 more...stuff 👍.
+#+BEGIN_SRC toml
+[package]
+name = "guessing_game"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+rand = "0.9.0"
+#+END_SRC
 
 #+BEGIN_SRC rust
+// Use the cmp::Ordering module and the io module for comparison and input-output.
+use std::{cmp::Ordering, io};
+// Use the rand::Rng module for random number generation.
+use rand::Rng;
+
 fn main() {
-        println!()
+    println!("Guess a number!");
+    // Generate a random number in range 1-100.
+    let secret_number: u32 = rand::rng().random_range(1..=100);
+    // Start try counter at 0.
+    let mut tries: u32 = 0;
+    // Start an infinite loop.
+    'ordering: loop {
+        // Create empty string.
+        let mut input = String::new();
+        // Create match statement for the read_line method.
+        match io::stdin().read_line(&mut input) {
+            // If the result value for read_line is Ok then run the program's logic.
+            Ok(_) => {
+                // Assign the trimmed and parsed input Ok value to the variable guess.
+                let guess: u32 = match input.trim().parse() {
+                    // If the result value for parse is Ok then return the contained value to the
+                    // variable.
+                    Ok(num) => num,
+                    // If the result value for parse is Err then continue the loop.
+                    Err(_) => continue,
+                };
+                // Add one to the try counter.
+                tries += 1;
+                // Match the comparison of the guess with the generated number.
+                match guess.cmp(&secret_number) {
+                    // If equal then print a success statement with the amount of tries it took.
+                    Ordering::Equal => {
+                        println!("You guessed it right in {} tries!", tries);
+                        break 'ordering;
+                    }
+                    // If not equal print the respective comparison.
+                    Ordering::Less => println!("Too small."),
+                    Ordering::Greater => println!("Too big."),
+                }
+            }
+            // If the result value for read_line is Err then print the error and break 'ordering out of the loop.
+            Err(error) => {
+                println!("Error: {error}");
+                break 'ordering;
+            }
+        };
+    }
 }
 #+END_SRC
 
-Test lul.
+#+BEGIN_SRC emacs-lisp
+(require 'gruvbox-theme)
+#+END_SRC
+
+#+BEGIN_SRC nix
+{ pkgs, lib, ... }:
+
+let
+  # String
+  name = "example";
+
+  # Integer
+  port = 8080;
+
+  # Float
+  ratio = 3.14;
+
+  # Boolean
+  enabled = true;
+
+  # Null
+  nothing = null;
+
+  # Path
+  localScript = ./scripts/start.sh;
+
+  # List
+  services = [
+    "nginx"
+    "postgresql"
+    "redis"
+  ];
+
+  # Attribute set
+  config = {
+    inherit name port ratio;
+    description = "Sample service with all types";
+    paths = [ localScript ];
+    metadata = {
+      createdBy = "nixos-config";
+      tags = [ "nix" "types" "demo" ];
+    };
+  };
+
+  # Function
+  mkService = { name, port, ... }: {
+    serviceName = name;
+    listenPort = port;
+    enable = true;
+    exec = "${pkgs.bash}/bin/bash ${localScript}";
+  };
+
+  # Import external file (path again)
+  importedConfig = import ./example-config.nix;
+
+in {
+  services.example = mkService {
+    inherit name port;
+  };
+
+  extraConfig = config // importedConfig;
+}
+#+END_SRC

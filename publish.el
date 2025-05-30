@@ -1,16 +1,15 @@
 ;; -*- lexical-binding: t; -*-
+(require 'package)
+(package-initialize)
+
 (require 'ox-publish)
 (require 'htmlize)
 
-(setq org-html-htmlize-output-type 'inline-css)
+(setq org-html-htmlize-output-type 'css)
 (setq org-src-fontify-natively t)
+(setq org-html-validation-link nil)
 
-(require 'font-lock)
-(let ((buf (get-buffer-create "*fontlock-init*")))
-  (with-current-buffer buf
-    (emacs-lisp-mode)
-    (font-lock-ensure))
-  (kill-buffer buf))
+(global-font-lock-mode t)
 
 (setq base-dir (expand-file-name "."))
 
@@ -23,6 +22,7 @@
          :with-toc nil
          :html-head-include-default-style nil
          :html-head "<link rel=\"stylesheet\" href=\"../assets/style.css\" />")
+         :html-postamble nil
 
         ("site-static"
          :base-directory ,(expand-file-name "assets" base-dir)

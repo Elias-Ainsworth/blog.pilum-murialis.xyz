@@ -29,7 +29,7 @@
                 coreutils
               ];
               text = ''
-                emacs -nw --load publish.el --eval '(progn (org-publish "site" t) (kill-emacs))'
+                emacs --batch --load publish.el t --eval '(org-publish "site" t)'
               '';
             };
           };
@@ -39,11 +39,5 @@
             development = pkgs.callPackage ./shell.nix { inherit inputs; };
           };
         };
-      # flake = {
-      #   nixosModules = rec {
-      #     default = pilum-murialis-xyz;
-      #     pilum-murialis-xyz = import ./flake/nixos.nix self;
-      #   };
-      # };
     };
 }
